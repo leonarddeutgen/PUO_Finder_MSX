@@ -1,4 +1,5 @@
 import customtkinter
+from tkinter import messagebox
 
 customtkinter.set_appearance_mode("dark")
 
@@ -7,14 +8,12 @@ customtkinter.set_default_color_theme("dark-blue") #blue green & dark-blue
 root = customtkinter.CTk()
 root.geometry("600x500")
 root.title("The Green Box")
-
 class puoBox:
-    def __init__(self, number, box_number):
+    def __init__(self, number, box_number, selected):
         self.number = number
         self.box_number = box_number
 
-boxes = []
-box_counter = 0
+boxes = [puoBox("w", i+1, False) for i in range(25)]
 
 def render_Boxes():
     for widget in boxes_container.winfo_children():
@@ -37,17 +36,18 @@ def render_Boxes():
         remove_button.pack(pady=12, padx=10, expand=True)
 
 def addPUO():
-    global box_counter
-    new_box = puoBox(user_input.get(), box_counter + 1)
-    boxes.append(new_box)
-    box_counter +=1
-    user_input.delete('0', 'end')
-    render_Boxes()
-
+    for box in boxes:
+        if box.number == "":
+            box.number = user_input.get()
+            user_input.delete(0, "end")
+            render_Boxes()
+            return
+    messagebox.showwarning("my title", "No empty box were found")
+    user_input.delete(0, "end")
+    
 def removePUO(index):
-    boxes.pop(index)
+    boxes[index].number = ""
     render_Boxes()
-
 
 app_container = customtkinter.CTkFrame(master=root)
 app_container.pack(pady=20, padx=40, fill="both", expand=True)
@@ -64,4 +64,5 @@ user_input.pack(pady=12, padx=10)
 button = customtkinter.CTkButton(master=app_container, text="Add PUO", command=addPUO)
 button.pack(pady=12, padx=10)
 
+render_Boxes()
 root.mainloop()
