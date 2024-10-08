@@ -9,14 +9,14 @@ root = customtkinter.CTk()
 root.geometry("600x500")
 root.title("The Green Box")
 class puoBox:
-    def __init__(self, number, box_number, selected):
-        self.number = number
+    def __init__(self, puo_number, box_number, selected):
+        self.number = puo_number
         self.box_number = box_number
         self.selected = selected
 
 boxes = [puoBox("", i+1, False) for i in range(20)]
 
-def render_Boxes():
+def render_boxes():
     for widget in boxes_container.winfo_children():
         widget.destroy()
 
@@ -37,32 +37,32 @@ def render_Boxes():
         puo_index = customtkinter.CTkLabel(master=puo_box, text=f"Box: {box.box_number}")
         puo_index.pack(pady=12, padx=10)
 
-        remove_button = customtkinter.CTkButton(master=puo_box, text="Remove", command=lambda i=i: removePUO(i))
+        remove_button = customtkinter.CTkButton(master=puo_box, text="Remove", command=lambda i=i: remove_puo(i))
         remove_button.pack(pady=12, padx=10, expand=True)
 
-def addPUO():
+def add_puo():
     for box in boxes:
         if box.number == "":
             box.number = user_input.get()
             user_input.delete(0, "end")
-            render_Boxes()
+            render_boxes()
             return
     messagebox.showwarning("Message", "No empty box were found")
     user_input.delete(0, "end")
 
-def searchPUO():
+def search_puo():
     for box in boxes:
         if box.number == user_input.get():
             box.selected = True
             user_input.delete(0, "end")
-            render_Boxes()
+            render_boxes()
             return
     messagebox.showinfo("Message", "PUO not found :(")
 
-def removePUO(index):
+def remove_puo(index):
     boxes[index].selected = False
     boxes[index].number = ""
-    render_Boxes()
+    render_boxes()
 
 app_container = customtkinter.CTkFrame(master=root)
 app_container.pack(pady=20, padx=40, fill="both", expand=True)
@@ -76,11 +76,11 @@ boxes_container.place(relx=0.05, rely=0.25, relwidth=0.90, relheight=0.80)
 user_input = customtkinter.CTkEntry(master=app_container, placeholder_text="Enter PUO")
 user_input.pack(pady=12, padx=10)
 
-add_button = customtkinter.CTkButton(master=app_container, text="Add PUO", command=addPUO)
+add_button = customtkinter.CTkButton(master=app_container, text="Add PUO", command=add_puo)
 add_button.pack(pady=12, padx=10)
 
-search_button = customtkinter.CTkButton(master=app_container, text="Search", command=searchPUO)
+search_button = customtkinter.CTkButton(master=app_container, text="Search", command=search_puo)
 search_button.pack(pady=12, padx=10)
 
-render_Boxes()
+render_boxes()
 root.mainloop()
